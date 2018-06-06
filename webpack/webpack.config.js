@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   // Define o modo de operação: 'development' ou 'production'
@@ -15,11 +16,14 @@ module.exports = {
     port: 5000,
     contentBase: './public'
   },
+  plugins: [
+    new ExtractTextPlugin('bundle.css')
+  ],
   // Configura os loaders e presets
   module: {
     rules: [
       {
-        test: /.js?$/,
+        test: /\.js?$/,
         include: /src/,
         exclude: /node_modules/,
         use: {
@@ -29,6 +33,13 @@ module.exports = {
             presets: ['es2015', 'react']
           }
         }
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader'
+        })
       }
     ]
   }
